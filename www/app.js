@@ -216,7 +216,7 @@ async function nevjegyValaszt() {
   if (!IS_NATIVE) { toast('Névjegy csak APK-ban működik', 'var(--piros)'); return; }
   try {
     const { Contacts } = Capacitor.Plugins;
-    const perm = await Contacts.requestPermissions();
+    const perm = await Contacts.requestPermissions({ permissions: ['readContacts'] });
     if (perm.contacts !== 'granted') { toast('Névjegy engedély szükséges', 'var(--piros)'); return; }
     const result = await Contacts.pickContact({
       projection: { name: true, phones: true, addresses: true }
