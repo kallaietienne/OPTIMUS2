@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>OPTIMUS 2</title>
+<style>
+:root { --bg: #0a0e1a; --bg2: #111827; --card: #1a2233; --kek: #00d4ff; --zold: #00ff88; --sarga: #ffd700; --piros: #ff4d6d; --szoveg: #e5eefb; --halvany: #8b9bb4; --vonal: #24304a; }
+body.light { --bg: #f0f4fa; --bg2: #ffffff; --card: #ffffff; --szoveg: #0a0e1a; --halvany: #5a6b82; --vonal: #d0dae8; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { margin: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: radial-gradient(circle at 50% 0%, #0f1a33 0%, var(--bg) 60%); color: var(--szoveg); min-height: 100vh; overflow-x: hidden; transition: background .3s, color .3s; }
+body.light { background: radial-gradient(circle at 50% 0%, #dbe7f7 0%, var(--bg) 60%); }
+.screen { display: none; padding: 16px; padding-bottom: 90px; min-height: 100vh; animation: fadeIn .25s ease; }
+.screen.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px);} to { opacity:1; transform:none;} }
+.header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.back-btn { background: var(--card); border: 1px solid var(--vonal); color: var(--kek); font-size: 22px; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .2s; }
+.back-btn:active { transform: scale(.92); background: var(--kek); color: #000; }
+.title { font-size: 22px; font-weight: 800; letter-spacing: 1px; background: linear-gradient(90deg, var(--kek), var(--zold)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.logo-big { font-size: 46px; font-weight: 900; letter-spacing: 3px; text-align: center; background: linear-gradient(90deg, var(--kek), var(--zold)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 18px rgba(0,212,255,.45)); margin: 30px 0 6px; }
+.logo-sub { text-align:center; color: var(--halvany); font-size: 13px; letter-spacing: 4px; margin-bottom: 34px; }
+.btn { display: flex; align-items: center; gap: 14px; width: 100%; padding: 18px 20px; margin-bottom: 12px; background: var(--card); border: 1px solid var(--vonal); border-radius: 16px; color: var(--szoveg); font-size: 17px; font-weight: 600; cursor: pointer; transition: all .18s; text-align: left; }
+.btn:active { transform: scale(.97); }
+.btn .ico { font-size: 26px; width: 34px; text-align: center; }
+.btn.neon-kek { border-color: var(--kek); box-shadow: 0 0 0 1px rgba(0,212,255,.25), 0 0 22px rgba(0,212,255,.12); }
+.btn.neon-zold { border-color: var(--zold); box-shadow: 0 0 0 1px rgba(0,255,136,.25), 0 0 22px rgba(0,255,136,.12); }
+.btn.neon-sarga { border-color: var(--sarga); box-shadow: 0 0 0 1px rgba(255,215,0,.3), 0 0 22px rgba(255,215,0,.15); }
+.btn:active { filter: brightness(1.15); }
+.btn-primary { background: linear-gradient(135deg, var(--kek), var(--zold)); color: #001018; border: none; justify-content: center; font-weight: 800; letter-spacing: .5px; box-shadow: 0 0 24px rgba(0,212,255,.35); }
+.btn-primary .ico { color: #001018; }
+.btn-danger { border-color: var(--piros); color: var(--piros); }
+.card { background: var(--card); border: 1px solid var(--vonal); border-radius: 16px; padding: 16px; margin-bottom: 12px; }
+.input-group { margin-bottom: 14px; }
+.input-group label { display: block; font-size: 13px; color: var(--halvany); margin-bottom: 6px; font-weight: 600; letter-spacing: .3px; }
+input, textarea, select { width: 100%; padding: 13px 14px; font-size: 16px; background: var(--bg2); border: 1px solid var(--vonal); border-radius: 12px; color: var(--szoveg); outline: none; transition: border .2s, box-shadow .2s; }
+input:focus, textarea:focus, select:focus { border-color: var(--kek); box-shadow: 0 0 0 3px rgba(0,212,255,.15); }
+textarea { resize: vertical; min-height: 70px; font-family: inherit; }
+.suggestions { position: relative; }
+.suggestion-item { padding: 12px 14px; background: var(--bg2); border: 1px solid var(--vonal); border-top: none; cursor: pointer; font-size: 14px; }
+.suggestion-item:last-child { border-radius: 0 0 12px 12px; }
+.suggestion-item:active { background: var(--vonal); }
+.cim-sor { display: flex; align-items: center; gap: 12px; background: var(--card); border: 1px solid var(--vonal); border-radius: 14px; padding: 14px; margin-bottom: 10px; transition: all .25s; position: relative; }
+.cim-sor.kovetkezo { border: 2px solid var(--sarga); box-shadow: 0 0 20px rgba(255,215,0,.35); transform: scale(1.01); }
+.cim-sor.kesz { border-color: var(--zold); background: rgba(0,255,136,.06); }
+.cim-sor.nem  { border-color: var(--piros); background: rgba(255,77,109,.06); opacity: .7; }
+.cim-sor .sorszam { font-size: 18px; font-weight: 900; color: var(--kek); min-width: 30px; text-align: center; }
+.cim-sor.kovetkezo .sorszam { color: var(--sarga); }
+.cim-sor.kesz .sorszam { color: var(--zold); }
+.cim-sor.nem .sorszam { color: var(--piros); }
+.cim-sor .tartalom { flex: 1; min-width: 0; }
+.cim-sor .cim-nev { font-weight: 700; font-size: 15px; margin-bottom: 2px; word-break: break-word; }
+.cim-sor .cim-al { font-size: 12px; color: var(--halvany); }
+.cim-sor .cim-tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 6px; margin-top: 5px; font-weight: 600; }
+.tag-folyoso { background: rgba(0,212,255,.15); color: var(--kek); }
+.tag-ag { background: rgba(0,255,136,.12); color: var(--zold); }
+.cim-sor .akciok { display: flex; flex-direction: column; gap: 6px; }
+.icon-btn { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--vonal); background: var(--bg2); color: var(--kek); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+.icon-btn:active { transform: scale(.9); }
+.icon-btn.zold { color: var(--zold); }
+.icon-btn.sarga { color: var(--sarga); }
+.icon-btn.piros { color: var(--piros); }
+.vegrehajtas-gombok { display: flex; gap: 8px; margin-top: 10px; }
+.vg-btn { flex: 1; padding: 12px; border-radius: 12px; border: none; font-size: 15px; font-weight: 800; cursor: pointer; transition: all .15s; }
+.vg-kesz { background: linear-gradient(135deg, var(--zold), #00cc6e); color: #001018; }
+.vg-nem  { background: linear-gradient(135deg, var(--piros), #cc3355); color: #fff; }
+.vg-btn:active { transform: scale(.95); }
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.72); z-index: 1000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
+.modal-overlay.active { display: flex; animation: fadeIn .2s; }
+.modal { background: var(--card); border: 1px solid var(--kek); border-radius: 20px; padding: 24px; width: 100%; max-width: 400px; box-shadow: 0 0 40px rgba(0,212,255,.25); }
+.modal h3 { margin: 0 0 16px; font-size: 19px; color: var(--kek); }
+#terkep { width: 100%; height: 60vh; border-radius: 16px; background: var(--bg2); border: 1px solid var(--vonal); }
+.naplo-item { background: var(--card); border: 1px solid var(--vonal); border-radius: 14px; padding: 14px; margin-bottom: 10px; cursor: pointer; }
+.naplo-item:active { border-color: var(--kek); }
+.naplo-item .datum { color: var(--kek); font-weight: 700; font-size: 14px; }
+.naplo-item .db { color: var(--halvany); font-size: 12px; margin-top: 3px; }
+#toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--card); border: 1px solid var(--zold); color: var(--zold); padding: 14px 22px; border-radius: 14px; font-weight: 700; font-size: 14px; z-index: 2000; transition: transform .3s; box-shadow: 0 0 24px rgba(0,255,136,.3); pointer-events: none; max-width: 90vw; text-align: center; }
+#toast.show { transform: translateX(-50%) translateY(0); }
+.empty { text-align: center; color: var(--halvany); padding: 50px 20px; font-size: 15px; }
+.empty .ico { font-size: 50px; margin-bottom: 12px; opacity: .5; }
+.switch-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; }
+.switch { position: relative; width: 52px; height: 30px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; inset: 0; background: var(--vonal); border-radius: 30px; cursor: pointer; transition: .3s; }
+.slider:before { content: ""; position: absolute; height: 22px; width: 22px; left: 4px; bottom: 4px; background: #fff; border-radius: 50%; transition: .3s; }
+.switch input:checked + .slider { background: var(--zold); }
+.switch input:checked + .slider:before { transform: translateX(22px); }
+</style>
+</head>
+<body>
+
+<div id="scr-home" class="screen active">
+  <div class="logo-big">OPTIMUS 2</div>
+  <div class="logo-sub">CÍM · RUTIN · OPTIMALIZÁLÁS</div>
+  <button class="btn btn-primary" onclick="show('scr-lista')">
+    <span class="ico">📋</span> Címek / Optimalizálás
+  </button>
+  <button class="btn neon-kek" onclick="ujCimUres()">
+    <span class="ico">➕</span> Új cím
+  </button>
+  <button class="btn neon-zold" onclick="show('scr-terkep')">
+    <span class="ico">🗺️</span> Térkép
+  </button>
+  <button class="btn neon-kek" onclick="show('scr-naplo')">
+    <span class="ico">📅</span> Napló
+  </button>
+  <button class="btn neon-zold" onclick="show('scr-beallitas')">
+    <span class="ico">⚙️</span> Beállítások
+  </button>
+</div>
+
+<div id="scr-ujcim" class="screen">
+  <div class="header">
+    <button class="back-btn" onclick="show('scr-home')">←</button>
+    <div class="title" id="ujcim-cim">Új cím</div>
+  </div>
+  <div class="card">
+    <input type="hidden" id="szerkeszt-id" value="">
+    <div class="input-group suggestions">
+      <label>Cím (keresés)</label>
+      <input id="uj-cim" placeholder="Kezdj el gépelni..." autocomplete="off">
+      <div id="uj-cim-javaslatok"></div>
+    </div>
+    <div class="input-group">
+      <label>Név / cégnév</label>
+      <input id="uj-nev" placeholder="Pl. Kovács Kft.">
+    </div>
+    <div class="input-group">
+      <label>Telefonszám</label>
+      <div style="display:flex;gap:8px;">
+        <input id="uj-tel" type="tel" placeholder="+36 ..." style="flex:1;">
+        <button class="icon-btn" id="nevjegy-gomb" onclick="nevjegyValaszt()" style="display:none;width:50px;height:50px;font-size:22px;">📇</button>
+      </div>
+    </div>
+    <div class="input-group">
+      <label>Megjegyzés</label>
+      <textarea id="uj-megj" placeholder="Opcionális..."></textarea>
+    </div>
+    <button class="btn btn-primary" id="uj-mentes-btn" onclick="ujCimMentes()">
+      <span class="ico">💾</span> Mentés
+    </button>
+    <button class="btn" onclick="terkepreMegy()">
+      <span class="ico">🗺️</span> Térképről választok
+    </button>
+  </div>
+</div>
+
+<div id="scr-lista" class="screen">
+  <div class="header">
+    <button class="back-btn" onclick="show('scr-home')">←</button>
+    <div class="title">Címek</div>
+  </div>
+  <div class="card" style="padding:14px;">
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="btn btn-primary" style="margin:0;flex:1;padding:13px;" onclick="optimalizalasIndit()">
+        <span class="ico">🔄</span> Optimalizálás
+      </button>
+      <button class="btn neon-kek" style="margin:0;width:auto;padding:13px 16px;" onclick="ujCimUres()">
+        <span class="ico">➕</span>
+      </button>
+    </div>
+    <div class="switch-row" style="padding-bottom:0;">
+      <span style="font-size:14px;color:var(--halvany);">Végrehajtási mód</span>
+      <label class="switch"><input type="checkbox" id="vegrehajtas-mod" onchange="vegrehajtasValt()"><span class="slider"></span></label>
+    </div>
+  </div>
+  <div id="lista-tartalom"></div>
+</div>
+
+<div id="scr-terkep" class="screen">
+  <div class="header">
+    <button class="back-btn" onclick="show('scr-home')">←</button>
+    <div class="title">Térkép</div>
+  </div>
+  <div id="terkep"></div>
+  <div class="card" style="margin-top:12px;">
+    <div style="font-size:13px;color:var(--halvany);">Koppints a térképre egy cím felvételéhez.</div>
+  </div>
+</div>
+
+<div id="scr-naplo" class="screen">
+  <div class="header">
+    <button class="back-btn" onclick="show('scr-home')">←</button>
+    <div class="title">Napló</div>
+  </div>
+  <div id="naplo-tartalom"></div>
+</div>
+
+<div id="scr-beallitas" class="screen">
+  <div class="header">
+    <button class="back-btn" onclick="show('scr-home')">←</button>
+    <div class="title">Beállítások</div>
+  </div>
+  <div class="card">
+    <h3 style="margin:0 0 12px;color:var(--kek);font-size:16px;">🏠 Telephely (A pont)</h3>
+    <div class="input-group">
+      <label>Telephely címe</label>
+      <input id="beall-telephely" placeholder="Pl. Fő utca 1, Budapest">
+    </div>
+    <button class="btn neon-zold" style="margin:0;" onclick="telephelyMentes()">
+      <span class="ico">💾</span> Telephely mentése
+    </button>
+  </div>
+  <div class="card">
+    <h3 style="margin:0 0 12px;color:var(--kek);font-size:16px;">🗺️ TomTom API</h3>
+    <div class="input-group">
+      <label>API kulcs</label>
+      <input id="beall-tomtom" placeholder="TomTom API kulcs">
+    </div>
+    <button class="btn neon-kek" style="margin:0;" onclick="tomtomMentes()">
+      <span class="ico">💾</span> Kulcs mentése
+    </button>
+  </div>
+  <div class="card">
+    <h3 style="margin:0 0 12px;color:var(--kek);font-size:16px;">🛣️ Optimalizálás</h3>
+    <div class="input-group">
+      <label>Folyosószélesség (km)</label>
+      <input id="beall-width" type="number" step="0.5" min="0" placeholder="Pl. 3">
+    </div>
+    <div class="input-group">
+      <label>Navigáció app</label>
+      <select id="beall-nav">
+        <option value="auto">Auto (telepített)</option>
+        <option value="google">Google Maps</option>
+        <option value="waze">Waze</option>
+      </select>
+    </div>
+  </div>
+  <div class="card">
+    <h3 style="margin:0 0 12px;color:var(--kek);font-size:16px;">🎨 Megjelenés</h3>
+    <div class="switch-row">
+      <span>🌙 Sötét mód</span>
+      <label class="switch"><input type="checkbox" id="beall-dark" onchange="darkValt()"><span class="slider"></span></label>
+    </div>
+  </div>
+  <div class="card">
+    <h3 style="margin:0 0 12px;color:var(--kek);font-size:16px;">💾 Adatok</h3>
+    <button class="btn neon-kek" onclick="exportAdat()">
+      <span class="ico">📤</span> Export (JSON)
+    </button>
+    <button class="btn neon-zold" onclick="document.getElementById('import-fajl').click()">
+      <span class="ico">📥</span> Import (JSON)
+    </button>
+    <input type="file" id="import-fajl" accept=".json" style="display:none" onchange="importAdat(event)">
+  </div>
+</div>
+
+<div id="modal-tomtom" class="modal-overlay">
+  <div class="modal">
+    <h3>🗺️ TomTom API kulcs</h3>
+    <p style="color:var(--halvany);font-size:14px;margin:0 0 16px;">
+      Az OPTIMUS 2 használatához szükség van egy TomTom API kulcsra.
+      Később a Beállításokban módosítható.
+    </p>
+    <div class="input-group">
+      <label>API kulcs</label>
+      <input id="modal-tomtom-input" placeholder="Írd be a kulcsot...">
+    </div>
+    <button class="btn btn-primary" onclick="modalTomTomMentes()">
+      <span class="ico">💾</span> Mentés és indulás
+    </button>
+  </div>
+</div>
+
+<div id="modal-osszegzes" class="modal-overlay">
+  <div class="modal">
+    <h3>✅ Optimalizálás kész</h3>
+    <div id="modal-osszegzes-tartalom" style="font-size:15px;line-height:1.8;margin-bottom:18px;"></div>
+    <button class="btn btn-primary" onclick="modalOsszegzesBezar()">
+      <span class="ico">👌</span> Rendben
+    </button>
+  </div>
+</div>
+
+<div id="modal-kiszallitas" class="modal-overlay">
+  <div class="modal">
+    <h3>🎉 Kiszállítás kész!</h3>
+    <div id="kiszallitas-osszegzes" style="font-size:15px;line-height:1.9;margin-bottom:18px;"></div>
+    <button class="btn btn-primary" onclick="ujKiszallitas()">
+      <span class="ico">🔄</span> Új kiszállítás
+    </button>
+    <button class="btn neon-kek" style="margin-top:8px;" onclick="kiszallitasNaplo()">
+      <span class="ico">📅</span> Napló megtekintése
+    </button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
